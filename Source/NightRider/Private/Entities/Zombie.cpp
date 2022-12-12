@@ -4,6 +4,7 @@
 #include "Entities/Zombie.h"
 
 #include <Services/Statistcs.h>
+#include <Entities/Rider.h>
 
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/BoxComponent.h"
@@ -43,6 +44,14 @@ void AZombie::OnShooted()
 	this->ZombieCollision->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 
 	UStatistcs::RegisterZombieKilled(this->GetWorld(), this);
+}
+
+void AZombie::OnRiderCollide(ARider* rider)
+{
+	if (!this->IsDead) 
+	{
+		rider->Die();
+	}
 }
 
 // Called when the game starts or when spawned

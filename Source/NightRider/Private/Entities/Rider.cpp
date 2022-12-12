@@ -221,11 +221,13 @@ void ARider::SetIntermediaryState()
 	this->RiderCamera->FieldOfView = this->OnIntermediaryCameraLens;
 }
 
-void ARider::SetDeadState()
+void ARider::Die()
 {
+	this->CurrentVelocity = 0;
+	this->Collision->SetSimulatePhysics(false);
+	
 	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(this->GetWorld()));
 	currentGameMode->ShowDeadScreen();
-
 }
 
 // Called every frame
@@ -258,30 +260,11 @@ void ARider::OnRiderHit(
 		AActor* hittedOtherActor
 	,	const FHitResult& hit)
 {
-	UE_LOG(LogTemp, Log, TEXT("Bati no que? %s"), *hittedOtherActor->GetName());
-
-	if (hittedOtherActor->IsA(AObstacle::StaticClass()))
+	
+	if (hittedOtherActor->GetClass()->ImplementsInterface(URiderCollideCallback::StaticClass())) 
 	{
-		this->CurrentVelocity = 0;
-		this->Collision->SetSimulatePhysics(false);
-		this->SetDeadState();
+		Cast<IRiderCollideCallback>(hittedOtherActor)->OnRiderCollide(this);
 	}
-	if(hittedOtherActor->IsA(AZombie::StaticClass()))
-	{
-		AZombie* zombieHitted = Cast<AZombie>(hittedOtherActor);
-		if (!zombieHitted->GetIsDead()) 
-		{
-			this->CurrentVelocity = 0;
-			this->Collision->SetSimulatePhysics(false);
-			this->SetDeadState();
-		}
-		
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("Nao e um obstaculo? %s"), *hittedOtherActor->GetName());
-	}
-
 }
 
 

@@ -4,10 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+#include <Services/RiderCollideCallback.h>
+
 #include "Obstacle.generated.h"
 
 UCLASS()
-class NIGHTRIDER_API AObstacle : public AActor
+class NIGHTRIDER_API AObstacle : public AActor, public IRiderCollideCallback
 {
 	GENERATED_BODY()
 	

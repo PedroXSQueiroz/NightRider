@@ -4,10 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+#include <Services/RiderCollideCallback.h>
+
 #include "Zombie.generated.h"
 
 UCLASS()
-class NIGHTRIDER_API AZombie : public AActor
+class NIGHTRIDER_API AZombie : public AActor , public IRiderCollideCallback
 {
 	GENERATED_BODY()
 	
@@ -27,6 +30,8 @@ public:
 	bool GetIsDead();
 	
 	void OnShooted();
+
+	virtual void OnRiderCollide(class ARider* rider) override;
 
 protected:
 	// Called when the game starts or when spawned

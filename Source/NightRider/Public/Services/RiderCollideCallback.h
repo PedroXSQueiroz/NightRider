@@ -9,9 +9,17 @@
 /**
  * 
  */
-UCLASS()
-class NIGHTRIDER_API URiderCollideCallback : public UObject
+UINTERFACE(MinimalAPI)
+class URiderCollideCallback : public UInterface
 {
-	GENERATED_BODY()
-	
+	GENERATED_UINTERFACE_BODY()
+};
+
+class NIGHTRIDER_API IRiderCollideCallback
+{
+	GENERATED_IINTERFACE_BODY()
+
+public:
+
+	virtual void OnRiderCollide(class ARider* rider);
 };

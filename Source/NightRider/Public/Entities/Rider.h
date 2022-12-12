@@ -107,7 +107,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetIntermediaryState();
 
-	void SetDeadState();
+	void Die();
 
 protected:
 	// Called when the game starts or when spawned
