@@ -141,5 +141,7 @@ public:
 		AActor* hittedOtherActor,
 		const FHitResult& hit
 	);
-
+	
+	UFUNCTION(BlueprintCallable)
+	void OnRiderOverlap(AActor* hittedOtherActor);
 };

@@ -26,13 +26,33 @@ void ATileSection::BeginPlay()
 
 	this->ReferenceObserver = NewObject<URelativeVelocityObserverComponent>( this, this->ReferenceObserverType );
 	this->ReferenceObserver->RegisterComponent();
+}
 
-	
+void ATileSection::RemoveFromWorldBuilder() 
+{
+	if (this->WorldBuilder)
+	{
+		this->WorldBuilder->RemoveTile(this);
+	}
+
+	this->shouldRemove = true;
+}
+
+void ATileSection::FinishDestroy()
+{
+	this->RemoveFromWorldBuilder();
+
+	Super::FinishDestroy();
 }
 
 void ATileSection::SetWorldBuilder(UWorldBuilder* worldBuilder)
 {
 	this->WorldBuilder = worldBuilder;
+
+	if (this->shouldRemove) 
+	{
+		this->RemoveFromWorldBuilder();
+	}
 }
 
 void ATileSection::SetMaxDistanceFromReference(float distance) 
@@ -71,7 +91,6 @@ void ATileSection::Tick(float DeltaTime)
 
 void ATileSection::RecursiveDestroy() 
 {
-	
 	for (AActor* currentItem : this->TileItems)
 	{
 		if (currentItem) 

@@ -50,6 +50,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual void FinishDestroy() override;
+
+	void RemoveFromWorldBuilder();
 	
 	float MaxDistanceFromReference;
 	class UWorldBuilder* WorldBuilder;
@@ -58,6 +62,8 @@ protected:
 	//FIXME: THIS SHOULD NOT BE HERE
 	int Dificulty;
 	int DificultyMargin;
+
+	bool shouldRemove;
 
 private:
 

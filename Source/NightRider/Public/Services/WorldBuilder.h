@@ -34,6 +34,8 @@ public:
 
 	int GetTotalTilesCreated();
 
+	void RemoveTile(ATileSection* tile);
+
 protected:
 	
 	TArray<class ATileSection*> Tiles;

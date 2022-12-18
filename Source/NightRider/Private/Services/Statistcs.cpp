@@ -33,16 +33,25 @@ void UStatistcs::Init()
 		}
 	});
 
+	this->OnCashEarned().AddLambda([&](int cash) {
+		this->CurrentEarnedCash += cash;
+	});
+
 	this->TotalPoints.Emplace(0);
 	this->DistanceRunnned = 0;
+	this->TotalMulipliers = 1;
 	this->BarriersPerfectallyDodged = 0;
+	this->CurrentEarnedCash = 0;
 	this->ZombiesKilledByType.Empty();
 
 }
 
 float UStatistcs::GetTotalPoints()
 {
-	float currentTotalPoints = this->DistanceRunnned  + ( this->DistanceRunnned * this->GetTotalMultipliers() );
+	float currentTotalPoints = ( 
+									this->DistanceRunnned 
+								+	this->GetTotalZombiePoints()
+								) * this->TotalMulipliers;
 		
 	this->TotalPoints.Emplace(currentTotalPoints);
 	
@@ -65,9 +74,9 @@ int UStatistcs::GetTotalZombiesKilled()
 	return totalZombies;
 }
 
-float UStatistcs::GetTotalMultipliers()
+float UStatistcs::GetTotalZombiePoints()
 {
-	float totalZombiesMultiplier = 0;
+	float totalPoints = 0;
 
 	TArray<TSubclassOf<AZombie>> zombiesKilled;
 
@@ -75,10 +84,10 @@ float UStatistcs::GetTotalMultipliers()
 
 	for (TSubclassOf<AZombie> currentZombieType : zombiesKilled)
 	{
-		totalZombiesMultiplier += this->ZombieTypeToPoints[currentZombieType] * this->ZombiesKilledByType[currentZombieType];
+		totalPoints += this->ZombieTypeToPoints[currentZombieType] * this->ZombiesKilledByType[currentZombieType];
 	}
 
-	return totalZombiesMultiplier;
+	return totalPoints;
 }
 
 void UStatistcs::PersistRecord()
@@ -140,6 +149,12 @@ void UStatistcs::AddTotalDistanceRunned(UWorld* worldTarget, float totalDistranc
 	currentGameMode->CurrentStatistics->DistanceRunnned += totalDistranceRunned;
 }
 
+void UStatistcs::AddMultiplier(UWorld* worldTarget, float multi)
+{
+	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+	currentGameMode->CurrentStatistics->TotalMulipliers += multi;
+}
+
 int UStatistcs::GetCurrentPlayerLevel(UWorld* worldTarget)
 {
 	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
@@ -150,6 +165,12 @@ float UStatistcs::GetDistanceRunned(UWorld* worldTarget)
 {
 	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
 	return currentGameMode->CurrentStatistics->DistanceRunnned;
+}
+
+void UStatistcs::AddCash(UWorld* worldTarget, int cash)
+{
+	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+	currentGameMode->CurrentStatistics->OnCashEarned().Broadcast(cash);
 }
 
 template<typename DodgeCallback>
@@ -164,5 +185,12 @@ void UStatistcs::RegisterZombieKilledCallback(UWorld* worldTarget, ZombieKilledC
 {
 	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
 	currentGameMode->CurrentStatistics->OnZombieKilled().AddLambda(callback);
+}
+
+template<typename CashEarnedCallback>
+void UStatistcs::RegisterCashEarningCallback(UWorld* worldTarget, CashEarnedCallback callback)
+{
+	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+	currentGameMode->CurrentStatistics->OnCashEarned().AddLambda(callback);
 }
 

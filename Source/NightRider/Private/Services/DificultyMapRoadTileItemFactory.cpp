@@ -72,34 +72,42 @@ TArray<TSubclassOf<AActor>> UDificultyMapRoadTileItemFactory::GetItems(ARoadTile
 			
 			this->ItemToDificulty.GetKeys(itemTypes);
 
-			bool itemSelected = false;
+			//bool itemSelected = false;
+
+			TArray<TSubclassOf<AActor>> itemsOnPossibilityRange = TArray<TSubclassOf<AActor>>();
 
 			for (TSubclassOf<AActor> itemType : itemTypes) 
 			{
-				if (!itemSelected) 
-				{
+				//if (!itemSelected) 
+				//{
 					float itemTypeDificult = this->ItemToDificulty[itemType];
 
-					itemSelected = trailMinDificulty < itemTypeDificult && itemTypeDificult < trailMaxDificulty;
+					bool itemSelected = trailMinDificulty < itemTypeDificult && itemTypeDificult < trailMaxDificulty;
 
 					if (itemSelected) 
 					{
-						items.Add(itemType);
-
-						FString typeName;
-
-						itemType->GetName(typeName);
-
-						UE_LOG(LogTemp, Log, TEXT("Item type %s for trail: %i section: %i"), *typeName, currentTrailIndex, tileTarget->Index );
+						itemsOnPossibilityRange.Add(itemType);
 					}
-				}
+				//}
 				
 			}
-			
-			if (!itemSelected) 
+
+			if (itemsOnPossibilityRange.Num() == 0)
 			{
 				items.Add(NULL);
 			}
+			else 
+			{
+				TSubclassOf<AActor> itemType = itemsOnPossibilityRange[FMath::RandRange(0, itemsOnPossibilityRange.Num() - 1)];
+				FString typeName;
+
+				itemType->GetName(typeName);
+				
+				UE_LOG(LogTemp, Log, TEXT("Item type %s for trail: %i section: %i"), *typeName, currentTrailIndex, tileTarget->Index );
+				
+				items.Add(itemType);
+			}
+			
 
 		}
 		else 

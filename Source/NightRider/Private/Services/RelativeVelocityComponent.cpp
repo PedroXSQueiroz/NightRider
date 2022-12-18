@@ -25,8 +25,9 @@ void URelativeVelocityComponent::SetVelocity(FVector vel)
 void URelativeVelocityComponent::RegisterObserver(AActor* observer)
 {
 	this->Observers.Add(observer);
-}
 
+	FScriptDelegate removeObserver = FScriptDelegate();
+}
 
 // Called when the game starts
 void URelativeVelocityComponent::BeginPlay()
@@ -48,7 +49,9 @@ void URelativeVelocityComponent::TickComponent(float DeltaTime, ELevelTick TickT
 
 	TArray<AActor*> toRemove = TArray<AActor*>();
 
-	for (AActor* currentActorObserver : this->Observers) 
+	TArray<AActor*> currentObservers = TArray<AActor*>(this->Observers);
+
+	for (AActor* currentActorObserver : currentObservers)
 	{
 		
 		if (currentActorObserver->IsActorBeingDestroyed()) 

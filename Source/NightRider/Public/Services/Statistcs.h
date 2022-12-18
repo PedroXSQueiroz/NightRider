@@ -52,7 +52,7 @@ public:
 	virtual int GetTotalZombiesKilled();
 
 	UFUNCTION(BlueprintCallable)
-	virtual float GetTotalMultipliers();
+	virtual float GetTotalZombiePoints();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void PersistRecord();
@@ -97,17 +97,38 @@ public:
 
 	static void AddTotalDistanceRunned(UWorld* worldTarget, float totalDistranceRunned);
 
+	static void AddMultiplier(UWorld* worldTarget, float multi);
+
 	static int GetCurrentPlayerLevel(UWorld* worldTarget);
 
 	static float GetDistanceRunned(UWorld* worldTarget);
 
+	DECLARE_MULTICAST_DELEGATE_OneParam(FCashEarned, int cash)
+	FCashEarned& OnCashEarned()
+	{
+		return this->OnCashEarningEvent;
+	};
+
+	template<typename CashEarnedCallback>
+	static void RegisterCashEarningCallback(UWorld* worldTarget, CashEarnedCallback callback);
+
+	static void AddCash(UWorld* worldTarget,int cash);
+
 protected:
 
 	TOptional<float> TotalPoints;
+
+	float TotalMulipliers;
 	
 	FOnBarrierPerfectallyDodged OnBarrierPerfectallyDodgedEvent = FOnBarrierPerfectallyDodged();
 
 	FOnZombieKilled OnZombieKilledEvent = FOnZombieKilled();
+	
+	FCashEarned OnCashEarningEvent = FCashEarned();
 
 	int CurrentLevel;
+
+	int CurrentEarnedCash;
+
+	int TotalCash;
 };

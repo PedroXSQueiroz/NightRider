@@ -267,4 +267,12 @@ void ARider::OnRiderHit(
 	}
 }
 
+void ARider::OnRiderOverlap(AActor* hittedOtherActor)
+{
+	if (hittedOtherActor->GetClass()->ImplementsInterface(URiderCollideCallback::StaticClass()))
+	{
+		Cast<IRiderCollideCallback>(hittedOtherActor)->OnRiderCollide(this);
+	}
+}
+
 

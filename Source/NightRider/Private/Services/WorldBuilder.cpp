@@ -99,6 +99,11 @@ int UWorldBuilder::GetTotalTilesCreated()
 	return this->TotalTilesCreated;
 }
 
+void UWorldBuilder::RemoveTile(ATileSection* tile)
+{
+	this->Tiles.Remove(tile);
+}
+
 FVector UWorldBuilder::GetNextTilePosition(float sectionXSize)
 {
 	if (this->Tiles.IsEmpty())
