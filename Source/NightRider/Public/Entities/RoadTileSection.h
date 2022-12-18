@@ -20,12 +20,6 @@ public:
 	int TrailsCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray< TSubclassOf<class AZombie> > DifcultiesToZombies;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray< TSubclassOf<class AObstacle> > DifcultiesToObstacles;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf< class URoadTileItemFactory > ItemFactoryType;
 
 	class URoadTileItemFactory* ItemFactory;

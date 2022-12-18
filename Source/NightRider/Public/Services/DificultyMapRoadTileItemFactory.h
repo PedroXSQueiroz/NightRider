@@ -6,6 +6,21 @@
 #include "Services/RoadTileItemFactory.h"
 #include "DificultyMapRoadTileItemFactory.generated.h"
 
+USTRUCT(BlueprintType)
+struct FPossibilityRange 
+{
+	GENERATED_BODY()
+
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Min;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Max;
+
+};
+
 /**
  * 
  */
@@ -17,7 +32,7 @@ class NIGHTRIDER_API UDificultyMapRoadTileItemFactory : public URoadTileItemFact
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<TSubclassOf<AActor>, float> ItemToDificulty;
+	TMap<TSubclassOf<AActor>, FPossibilityRange> ItemToDificulty;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MaxDificultyByLavelFactor;

@@ -71,25 +71,23 @@ TArray<TSubclassOf<AActor>> UDificultyMapRoadTileItemFactory::GetItems(ARoadTile
 			TArray<TSubclassOf<AActor>> itemTypes = TArray<TSubclassOf<AActor>>();
 			
 			this->ItemToDificulty.GetKeys(itemTypes);
+			
 
-			//bool itemSelected = false;
 
 			TArray<TSubclassOf<AActor>> itemsOnPossibilityRange = TArray<TSubclassOf<AActor>>();
 
 			for (TSubclassOf<AActor> itemType : itemTypes) 
 			{
-				//if (!itemSelected) 
-				//{
-					float itemTypeDificult = this->ItemToDificulty[itemType];
+				FPossibilityRange itemTypeDificultRange = this->ItemToDificulty[itemType];
 
-					bool itemSelected = trailMinDificulty < itemTypeDificult && itemTypeDificult < trailMaxDificulty;
+				bool itemSelected = ( itemTypeDificultRange.Min < currentDificultyTarget ) && 
+									( currentDificultyTarget < itemTypeDificultRange.Max );
+									
 
-					if (itemSelected) 
-					{
-						itemsOnPossibilityRange.Add(itemType);
-					}
-				//}
-				
+				if (itemSelected) 
+				{
+					itemsOnPossibilityRange.Add(itemType);
+				}	
 			}
 
 			if (itemsOnPossibilityRange.Num() == 0)
