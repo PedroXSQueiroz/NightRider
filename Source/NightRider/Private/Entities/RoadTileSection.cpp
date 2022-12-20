@@ -123,6 +123,11 @@ void ARoadTileSection::BuildTrails( int riderTrailIndex )
 			);
 
 			this->TileItems.Add(currentItem);
+
+			if (!this->IsActorBeingDestroyed()) 
+			{
+				currentItem->OnDestroyed.AddDynamic(this, &ARoadTileSection::RemoveItem);
+			}
 		}
 		else 
 		{
@@ -166,4 +171,10 @@ int ARoadTileSection::GetTrailsCount()
 TArray<AActor*> ARoadTileSection::GetItems()
 {
 	return this->TileItems;
+}
+
+
+void ARoadTileSection::RemoveItem(AActor* currentItem)
+{
+	this->TileItems.Remove(currentItem);
 }

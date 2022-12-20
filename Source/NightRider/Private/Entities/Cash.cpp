@@ -46,6 +46,7 @@ void ACash::Tick(float DeltaTime)
 void ACash::OnRiderCollide(ARider* rider)
 {
 	UStatistcs::AddCash(this->GetWorld(), this->GetAmmount());
+	
 	this->Destroy();
 }
 

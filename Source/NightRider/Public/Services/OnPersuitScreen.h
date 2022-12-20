@@ -17,12 +17,34 @@ class NIGHTRIDER_API UOnPersuitScreen : public UUserWidget
 public:
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	class UTextBlock* TotalPointsCounter;
+	class UTextBlock* TotalPointsCounter = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UTextBlock* MultiplierCounter = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UTextBlock* TotalCashCounter = nullptr;
 
 	void SetTotalPoints(float totalPoints);
+
+	void Init(UWorld* world);
 
 protected:
 
 	virtual void NativeConstruct() override;
+
+	virtual void NativeDestruct() override;
+
+	float CurrentMultipliers;
+
+	int CurrentCash;
+
+	bool IsInitiated = false;
+
+	FDelegateHandle OnCashEarnedHandle;
+
+	FDelegateHandle OnMultiplierAaddesHandle;
+
+	UWorld* WorldReference;
 
 };

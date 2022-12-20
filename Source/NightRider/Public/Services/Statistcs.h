@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include <Kismet/GameplayStatics.h>
+
+#include <NightRider/NightRiderGameMode.h>
+
 
 #include "Statistcs.generated.h"
 
@@ -97,6 +101,25 @@ public:
 
 	static void AddTotalDistanceRunned(UWorld* worldTarget, float totalDistranceRunned);
 
+	DECLARE_MULTICAST_DELEGATE_OneParam(FMultiplierAdded, float multiplier)
+	FMultiplierAdded& OnMultiplierAdded()
+	{
+		return this->OnMultiplerAddedEvent;
+	};
+
+	template<typename MultiplierAddedCallback>
+	static FDelegateHandle RegisterMultiplierAddingCallback(UWorld* worldTarget, MultiplierAddedCallback callback)
+	{
+		ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+		return currentGameMode->CurrentStatistics->OnMultiplierAdded().AddLambda(callback);
+	}
+
+	static void RemoveMultiplierAddingCallback(UWorld* worldTarget, FDelegateHandle callback)
+	{
+		ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+		currentGameMode->CurrentStatistics->OnMultiplierAdded().Remove(callback);
+	}
+
 	static void AddMultiplier(UWorld* worldTarget, float multi);
 
 	static int GetCurrentPlayerLevel(UWorld* worldTarget);
@@ -110,7 +133,23 @@ public:
 	};
 
 	template<typename CashEarnedCallback>
-	static void RegisterCashEarningCallback(UWorld* worldTarget, CashEarnedCallback callback);
+	static FDelegateHandle RegisterCashEarningCallback(UWorld* worldTarget, CashEarnedCallback callback)
+	{
+		ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+		return currentGameMode->CurrentStatistics->OnCashEarned().AddLambda(callback);
+	}
+
+	static void RemoveCashEarningCallback(UWorld* worldTarget, FDelegateHandle callback)
+	{
+		ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+		currentGameMode->CurrentStatistics->OnCashEarned().Remove(callback);
+	}
+
+	/*FCashEarned& UStatistcs::GetCashEarnedEvent(UWorld* worldTarget)
+	{
+		ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+		return currentGameMode->CurrentStatistics->OnCashEarningEvent;
+	}*/
 
 	static void AddCash(UWorld* worldTarget,int cash);
 
@@ -125,6 +164,8 @@ protected:
 	FOnZombieKilled OnZombieKilledEvent = FOnZombieKilled();
 	
 	FCashEarned OnCashEarningEvent = FCashEarned();
+
+	FMultiplierAdded OnMultiplerAddedEvent = FMultiplierAdded();
 
 	int CurrentLevel;
 

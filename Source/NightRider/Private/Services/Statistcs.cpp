@@ -3,9 +3,9 @@
 
 #include "Services/Statistcs.h"
 
-#include <NightRider/NightRiderGameMode.h>
+//#include <NightRider/NightRiderGameMode.h>
 #include <Entities/Zombie.h>
-#include <Kismet/GameplayStatics.h>
+//#include <Kismet/GameplayStatics.h>
 
 
 void UStatistcs::Init()
@@ -21,6 +21,8 @@ void UStatistcs::Init()
 
 	this->OnZombieKilled().AddLambda([&](AZombie* zombie) {
 		
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Zombie killed"));
+		
 		UClass* zombieType = zombie->GetClass();
 
 		if (this->ZombiesKilledByType.Contains(zombieType)) 
@@ -34,7 +36,15 @@ void UStatistcs::Init()
 	});
 
 	this->OnCashEarned().AddLambda([&](int cash) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Cash earned"));
+		
 		this->CurrentEarnedCash += cash;
+	});
+
+	this->OnMultiplierAdded().AddLambda([&](float multi) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Muliplier increased"));
+		
+		this->TotalCacthedMultiplier += multi;
 	});
 
 	this->TotalPoints.Emplace(0);
@@ -152,7 +162,7 @@ void UStatistcs::AddTotalDistanceRunned(UWorld* worldTarget, float totalDistranc
 void UStatistcs::AddMultiplier(UWorld* worldTarget, float multi)
 {
 	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
-	currentGameMode->CurrentStatistics->TotalMulipliers += multi;
+	currentGameMode->CurrentStatistics->OnMultiplierAdded().Broadcast(multi);
 }
 
 int UStatistcs::GetCurrentPlayerLevel(UWorld* worldTarget)
@@ -187,10 +197,17 @@ void UStatistcs::RegisterZombieKilledCallback(UWorld* worldTarget, ZombieKilledC
 	currentGameMode->CurrentStatistics->OnZombieKilled().AddLambda(callback);
 }
 
-template<typename CashEarnedCallback>
-void UStatistcs::RegisterCashEarningCallback(UWorld* worldTarget, CashEarnedCallback callback)
-{
-	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
-	currentGameMode->CurrentStatistics->OnCashEarned().AddLambda(callback);
-}
+//template<typename MultiplierAddedCallback>
+//void UStatistcs::RegisterMultiplierAddingCallback(UWorld* worldTarget, MultiplierAddedCallback callback)
+//{
+//	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+//	currentGameMode->CurrentStatistics->OnMultiplierAdded().AddLambda(callback);
+//}
+
+//template<typename CashEarnedCallback>
+//void UStatistcs::RegisterCashEarningCallback(UWorld* worldTarget, CashEarnedCallback callback)
+//{
+//	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+//	currentGameMode->CurrentStatistics->OnCashEarned().AddLambda(callback);
+//}
 

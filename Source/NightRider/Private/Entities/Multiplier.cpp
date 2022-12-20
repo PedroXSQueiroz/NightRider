@@ -35,8 +35,8 @@ void AMultiplier::OnRiderCollide(ARider* rider)
 	this->MultiplierCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	
 	UStatistcs::AddMultiplier( this->GetWorld(), this->GetValue() );
-
-	this->Destroy();
+	
+	this->Destroy(); 
 }
 
 // Called every frame

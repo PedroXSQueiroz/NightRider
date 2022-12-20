@@ -80,7 +80,7 @@ void ATileSection::Tick(float DeltaTime)
 			UStatistcs::RegisterBarrierPerfectallyDodged(this->GetWorld());
 		}
 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Passed through center"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Passed through center"));
 	}
 	else
 	{
@@ -91,6 +91,8 @@ void ATileSection::Tick(float DeltaTime)
 
 void ATileSection::RecursiveDestroy() 
 {
+	
+	
 	for (AActor* currentItem : this->TileItems)
 	{
 		if (currentItem) 

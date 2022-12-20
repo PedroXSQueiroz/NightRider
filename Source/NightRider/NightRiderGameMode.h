@@ -27,7 +27,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class UUserWidget> DeadScreen;
-
+	
 	class UWorldBuilder* CurrentWorldBuilder;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

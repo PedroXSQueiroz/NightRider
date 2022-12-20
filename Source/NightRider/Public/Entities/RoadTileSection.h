@@ -42,6 +42,9 @@ public:
 
 	TArray<AActor*> GetItems();
 
+	UFUNCTION()
+	void RemoveItem(AActor* currentItem);
+
 protected:
 
 	TArray<float> TrailRelativePositions;

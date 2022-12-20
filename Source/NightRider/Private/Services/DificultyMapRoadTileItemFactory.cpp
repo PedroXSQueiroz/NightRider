@@ -80,11 +80,11 @@ TArray<TSubclassOf<AActor>> UDificultyMapRoadTileItemFactory::GetItems(ARoadTile
 			{
 				FPossibilityRange itemTypeDificultRange = this->ItemToDificulty[itemType];
 
-				bool itemSelected = ( itemTypeDificultRange.Min < currentDificultyTarget ) && 
+				bool itemInRange = ( itemTypeDificultRange.Min < currentDificultyTarget ) && 
 									( currentDificultyTarget < itemTypeDificultRange.Max );
 									
 
-				if (itemSelected) 
+				if (itemInRange) 
 				{
 					itemsOnPossibilityRange.Add(itemType);
 				}	

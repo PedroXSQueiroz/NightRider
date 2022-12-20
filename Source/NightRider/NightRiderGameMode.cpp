@@ -58,7 +58,12 @@ void ANightRiderGameMode::BeginPlay()
 void ANightRiderGameMode::ShowOnPersuitScreen()
 {
 	this->CurrentWidgetOnScreen->RemoveFromViewport();
-	this->CurrentWidgetOnScreen = CreateWidget<UUserWidget>(this->GetWorld(), this->OnPersuitScreen);
+
+	UOnPersuitScreen* onPersuitScreen = CreateWidget<UOnPersuitScreen>(this->GetWorld(), this->OnPersuitScreen);
+	
+	onPersuitScreen->Init(this->GetWorld());
+	
+	this->CurrentWidgetOnScreen = onPersuitScreen;
 	this->CurrentWidgetOnScreen->AddToViewport();
 }
 
@@ -66,8 +71,7 @@ void ANightRiderGameMode::ShowDeadScreen()
 {
 	this->CurrentWidgetOnScreen->RemoveFromViewport();
 
-	UUserWidget* currentScreen = CreateWidget<UUserWidget>(this->GetWorld(), this->DeadScreen);
-	UDeadScreen* deadScreen = Cast<UDeadScreen>(currentScreen);
+	UDeadScreen* deadScreen = CreateWidget<UDeadScreen>(this->GetWorld(), this->DeadScreen);
 
 	deadScreen->SetTotalDistanceValue(this->CurrentStatistics->DistanceRunnned);
 	deadScreen->SetDeadZombiesValue(this->CurrentStatistics->GetTotalZombiesKilled());
