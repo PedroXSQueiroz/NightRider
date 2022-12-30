@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+
+#include "Ranking.h"
+
 #include "LevelProgression.generated.h"
 
 /**
@@ -21,6 +24,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class URanking> RankingService;
 	
-	enum ERanking GetRanking(int level, float points);
+	ERanking GetRanking(int level, float points);
 
 };
