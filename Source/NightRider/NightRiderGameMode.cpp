@@ -10,9 +10,11 @@
 #include <Services/Statistcs.h>
 #include <Services/OnPersuitScreen.h>
 #include <Services/LevelProgression.h>
+#include <Services/DeadScreen.h>
 #include <Entities/Rider.h>
 #include <Entities/Motorcycle.h>
-#include <Services/DeadScreen.h>
+
+#include <WorldBuilderModule/Public/Services/WorldTileFactory.h>
 
 ANightRiderGameMode::ANightRiderGameMode()
 {
@@ -76,6 +78,12 @@ void ANightRiderGameMode::ShowDeadScreen()
 	deadScreen->SetTotalDistanceValue(this->CurrentStatistics->DistanceRunnned);
 	deadScreen->SetDeadZombiesValue(this->CurrentStatistics->GetTotalZombiesKilled());
 	deadScreen->SetTotalPointsValue(this->CurrentStatistics->GetTotalPoints());
+
+	UWorld* currentWorld = this->GetWorld();
+	
+	deadScreen->SetRecordTotalDistanceValue( UStatistcs::GetRecordDistanceRunned(currentWorld) );
+	deadScreen->SetRecordTotalPointsValue(UStatistcs::GetRecordTotalPoints(currentWorld));
+	deadScreen->SetRecordDeadZombiesValue(UStatistcs::GetRecordTotalZombiesKilled(currentWorld));
 
 	this->CurrentWidgetOnScreen = deadScreen;
 	this->CurrentWidgetOnScreen->AddToViewport();

@@ -59,7 +59,16 @@ public:
 	virtual float GetTotalZombiePoints();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void PersistRecord();
+	static float GetRecordTotalPoints(UWorld* worldTarget);
+
+	UFUNCTION(BlueprintCallable)
+	static int GetRecordTotalZombiesKilled(UWorld* worldTarget);
+
+	UFUNCTION(BlueprintCallable)
+	static float GetRecordDistanceRunned(UWorld* worldTarget);
+
+	UFUNCTION(BlueprintCallable)
+	virtual void UpdateRecord();
 
 	/*----------------------------------------------------------------
 	* RECORD
@@ -152,6 +161,8 @@ public:
 	}*/
 
 	static void AddCash(UWorld* worldTarget,int cash);
+
+	static void SaveRecord(UWorld* worldTarget);
 
 protected:
 

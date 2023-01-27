@@ -5,6 +5,11 @@
 
 //#include <NightRider/NightRiderGameMode.h>
 #include <Entities/Zombie.h>
+#include <Entities/Record.h>
+
+#include "JsonObjectConverter.h"
+#include "Misc/FileHelper.h" 
+
 //#include <Kismet/GameplayStatics.h>
 
 
@@ -14,10 +19,14 @@ void UStatistcs::Init()
 	
 	this->BarriersPerfectallyDodged = 0;
 
+	this->OnBarrierPerfectDodge().Clear();
+
 	this->OnBarrierPerfectDodge().AddLambda([&]() {
 		this->BarriersPerfectallyDodged++;
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf( TEXT("Passed through center, counter + %i"), this->BarriersPerfectallyDodged) );
 	});
+
+	this->OnZombieKilled().Clear();
 
 	this->OnZombieKilled().AddLambda([&](AZombie* zombie) {
 		
@@ -35,11 +44,15 @@ void UStatistcs::Init()
 		}
 	});
 
+	this->OnCashEarned().Clear();
+
 	this->OnCashEarned().AddLambda([&](int cash) {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Cash earned"));
 		
 		this->CurrentEarnedCash += cash;
 	});
+
+	this->OnMultiplierAdded().Clear();
 
 	this->OnMultiplierAdded().AddLambda([&](float multi) {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Muliplier increased"));
@@ -53,6 +66,10 @@ void UStatistcs::Init()
 	this->BarriersPerfectallyDodged = 0;
 	this->CurrentEarnedCash = 0;
 	this->ZombiesKilledByType.Empty();
+
+	this->RecordTotalPoints = 0;
+	this->RecordTotalZombiesKilled = 0;
+	this->RecordDistanceRunnned = 0;
 
 }
 
@@ -100,9 +117,50 @@ float UStatistcs::GetTotalZombiePoints()
 	return totalPoints;
 }
 
-void UStatistcs::PersistRecord()
+float UStatistcs::GetRecordTotalPoints(UWorld* worldTarget)
+{
+	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+	return currentGameMode->CurrentStatistics->RecordTotalPoints;
+}
+
+int UStatistcs::GetRecordTotalZombiesKilled(UWorld* worldTarget)
+{
+	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+	return currentGameMode->CurrentStatistics->RecordTotalZombiesKilled;
+}
+
+float UStatistcs::GetRecordDistanceRunned(UWorld* worldTarget)
+{
+	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+	return currentGameMode->CurrentStatistics->RecordDistanceRunnned;
+}
+
+void UStatistcs::UpdateRecord()
 {
 	
+	FString file = FPaths::ProjectContentDir();
+	file.Append(TEXT("Record.json"));
+
+	IPlatformFile& FileManager = FPlatformFileManager::Get().GetPlatformFile();
+
+	if (FileManager.FileExists(*file))
+	{
+		FString recordSource = FString();
+		
+		if (FFileHelper::LoadFileToString(recordSource, *file))
+		{
+			FRecord* previousRecord = new FRecord();
+			
+			FJsonObjectConverter::JsonObjectStringToUStruct( recordSource, previousRecord);
+
+			this->RecordTotalPoints = previousRecord->TotalPoints;
+			this->RecordDistanceRunnned = previousRecord->DistanceRunnned;
+			this->RecordTotalZombiesKilled = previousRecord->TotalZombiesKilled;
+		}
+
+		FileManager.DeleteFile(*file);
+	}
+
 	this->RecordDistanceRunnned = 
 		this->DistanceRunnned > this->RecordDistanceRunnned ?
 			this->DistanceRunnned :
@@ -139,6 +197,21 @@ void UStatistcs::PersistRecord()
 			currentTotalPoints :
 			this->RecordTotalPoints;
 
+	FRecord currentRecord = FRecord(
+								this->RecordDistanceRunnned
+							,	this->RecordTotalZombiesKilled
+							,	this->RecordTotalPoints);
+
+	FString currentRecordJsonContent;
+
+	FJsonObjectConverter::UStructToJsonObjectString(currentRecord, currentRecordJsonContent);
+
+	FFileHelper::SaveStringToFile(
+						currentRecordJsonContent
+					,	*file
+					,	FFileHelper::EEncodingOptions::AutoDetect
+					,	&IFileManager::Get()
+					,	FILEWRITE_Append);
 }
 
 void UStatistcs::RegisterBarrierPerfectallyDodged(UWorld* worldTarget)
@@ -181,6 +254,12 @@ void UStatistcs::AddCash(UWorld* worldTarget, int cash)
 {
 	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
 	currentGameMode->CurrentStatistics->OnCashEarned().Broadcast(cash);
+}
+
+void UStatistcs::SaveRecord(UWorld* worldTarget) 
+{
+	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+	currentGameMode->CurrentStatistics->UpdateRecord();
 }
 
 template<typename DodgeCallback>

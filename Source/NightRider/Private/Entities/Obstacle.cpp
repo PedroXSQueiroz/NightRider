@@ -20,16 +20,18 @@ AObstacle::AObstacle()
 	this->ObstacleCollision->SetupAttachment(this->RootComponent);
 	//this->RootComponent = this->ObstacleCollision;
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> obstacleMeshObject ( TEXT( "StaticMesh'/Game/LevelPrototyping/Meshes/SM_ChamferCube.SM_ChamferCube'" ) );
+	//ConstructorHelpers::FObjectFinder<UStaticMesh> obstacleMeshObject ( TEXT( "StaticMesh'/Game/LevelPrototyping/Meshes/SM_ChamferCube.SM_ChamferCube'" ) );
+	
+	this->ObstacleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OBSTACLE_MESH")); 
+	this->ObstacleMesh->SetupAttachment(this->ObstacleCollision);
+	/*this->ObstacleMesh->SetWorldScale3D(FVector(0.1, 0.1, 0.1));
+	this->ObstacleMesh->SetWorldRotation(FRotator(0, 90, 0));
+	this->ObstacleMesh->SetupAttachment(this->ObstacleCollision);*/
 
-	if (obstacleMeshObject.Succeeded()) 
-	{
-		this->ObstacleMesh = CreateAbstractDefaultSubobject<UStaticMeshComponent>(TEXT("OBSTACLE_MESH")); 
-		this->ObstacleMesh->SetStaticMesh(obstacleMeshObject.Object);
-		this->ObstacleMesh->SetWorldScale3D(FVector(0.1, 0.1, 0.1));
-		this->ObstacleMesh->SetWorldRotation(FRotator(0, 90, 0));
-		this->ObstacleMesh->SetupAttachment(this->ObstacleCollision);
-	}
+	//if (obstacleMeshObject.Succeeded()) 
+	//{
+	//	//this->ObstacleMesh->SetStaticMesh(obstacleMeshObject.Object);
+	//}
 }
 
 // Called when the game starts or when spawned

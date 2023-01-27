@@ -30,4 +30,19 @@ public:
 	void SetTotalDistanceValue(float value);
 
 	void SetTotalPointsValue(float value);
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UTextBlock* RecordDeadZombiesValue;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UTextBlock* RecordTotalDistanceValue;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UTextBlock* RecordTotalPointsValue;
+
+	void SetRecordDeadZombiesValue(int value);
+
+	void SetRecordTotalDistanceValue(float value);
+
+	void SetRecordTotalPointsValue(float value);
 };

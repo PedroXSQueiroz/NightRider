@@ -199,7 +199,11 @@ void ARider::Shoot()
 		if (hittedActor->IsA(AZombie::StaticClass())) 
 		{
 			AZombie* hittedZombie = Cast<AZombie>(hittedActor);
-			hittedZombie->OnShooted();
+			
+			if (!hittedZombie->GetIsDead()) 
+			{
+				hittedZombie->OnShooted();
+			}
 		}
 	}
 }
@@ -227,6 +231,9 @@ void ARider::Die()
 	this->Collision->SetSimulatePhysics(false);
 	
 	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(this->GetWorld()));
+
+	UStatistcs::SaveRecord(this->GetWorld());
+
 	currentGameMode->ShowDeadScreen();
 }
 
