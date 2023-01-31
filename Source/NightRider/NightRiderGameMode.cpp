@@ -14,7 +14,6 @@
 #include <Entities/Rider.h>
 #include <Entities/Motorcycle.h>
 
-#include <WorldBuilderModule/Public/Services/WorldTileFactory.h>
 
 ANightRiderGameMode::ANightRiderGameMode()
 {
