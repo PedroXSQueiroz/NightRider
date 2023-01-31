@@ -77,6 +77,18 @@ void ARider::StartMove(const ETouchIndex::Type fingerIndex, const FVector locati
 
 void ARider::SetMotorcycle(AMotorcycle* motorcycle) 
 {
+	motorcycle->AddActorWorldOffset(
+		FVector(0, 0, 2)
+	);
+	
+	motorcycle->MotorcycleMesh->SetRelativeTransform(
+		FTransform(
+			FRotator(0, -90, 0),
+			FVector(0, 0, 0),
+			FVector(0.1, 0.1, 0.1)
+		)
+	);
+	
 	this->Motorcycle = motorcycle;
 	this->Motorcycle->AttachToActor(
 		this
