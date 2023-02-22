@@ -10,5 +10,6 @@ public class NightRiderTarget : TargetRules
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		ExtraModuleNames.Add("NightRider");
+		ExtraModuleNames.Add("WorldBuilderModule");
 	}
 }

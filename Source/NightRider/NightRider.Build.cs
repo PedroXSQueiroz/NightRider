@@ -8,8 +8,10 @@ public class NightRider : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "UMG", "Slate", "SlateCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "UMG", "Slate", "SlateCore", "WorldBuilderModule" });
 
         PublicDependencyModuleNames.AddRange(new string[] { "Json", "JsonUtilities" });
+
+        OptimizeCode = CodeOptimization.Never;
     }
 }

@@ -6,9 +6,11 @@
 #include "GameFramework/GameModeBase.h"
 #include "Blueprint/UserWidget.h"
 
+#include <WorldBuilderModule/Public/Services/WorldTilesObservableContainer.h>
+
 #include "NightRiderGameMode.generated.h"
 
-UCLASS(minimalapi)
+UCLASS(Blueprintable, BlueprintType)
 class ANightRiderGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
@@ -50,6 +52,12 @@ public:
 	void Restart();
 
 	class UStatistcs* CurrentStatistics;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class UWorldTileFactory> WorldFileFactory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int InitialTilesCount;
 
 private:
 

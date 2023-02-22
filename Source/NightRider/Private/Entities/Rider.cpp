@@ -61,6 +61,8 @@ void ARider::BeginPlay()
 	this->Collision->BodyInstance.SetDOFLock(EDOFMode::SixDOF);
 
 	this->SetIntermediaryState();
+
+	this->ResetOffset();
 }
 
 void ARider::StartMove(const ETouchIndex::Type fingerIndex, const FVector location)
@@ -249,6 +251,21 @@ void ARider::Die()
 	currentGameMode->ShowDeadScreen();
 }
 
+FVector ARider::GetReferencePosition()
+{
+	return this->GetActorLocation();
+}
+
+FVector ARider::GetReferenceVelocity()
+{
+	return FVector(50, 0, 0);
+}
+
+bool ARider::IsReference()
+{
+	return true;
+}
+
 // Called every frame
 void ARider::Tick(float DeltaTime)
 {
@@ -260,6 +277,8 @@ void ARider::Tick(float DeltaTime)
 	this->RootComponent->SetWorldLocation( FVector(0, newCurrentLocation, 0) );
 
 	UStatistcs::AddTotalDistanceRunned(this->GetWorld(), ( this->CurrentVelocity * DeltaTime ) / 100 );
+
+	this->UpdateReferenceOffset(DeltaTime);
 }
 
 // Called to bind functionality to input

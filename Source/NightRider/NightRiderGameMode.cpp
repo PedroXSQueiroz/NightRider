@@ -14,6 +14,8 @@
 #include <Entities/Rider.h>
 #include <Entities/Motorcycle.h>
 
+#include <WorldBuilderModule/Public/Services/WorldTileFactory.h>
+
 
 ANightRiderGameMode::ANightRiderGameMode()
 {
@@ -34,6 +36,8 @@ void ANightRiderGameMode::BeginPlay()
 
 	UWorld* currentWorldInstance = this->GetWorld();
 	
+	this->CurrentStatistics = this->CurrentStatisticsType.GetDefaultObject();
+
 	ARider* currentRider = Cast<ARider>(currentWorldInstance->GetFirstPlayerController()->GetPawn());
 	
 	AMotorcycle* motorcycle = currentWorldInstance->SpawnActor<AMotorcycle>(this->DefaultMotorcycleType,
@@ -44,15 +48,30 @@ void ANightRiderGameMode::BeginPlay()
 		));
 	currentRider->SetMotorcycle(motorcycle);
 
-	UWorldBuilder* worldBuilder = this->WorldBuilderType.GetDefaultObject();
+	/*UWorldBuilder* worldBuilder = this->WorldBuilderType.GetDefaultObject();
 	worldBuilder->init(currentWorldInstance);
 	worldBuilder->SetRider(currentRider);
-	worldBuilder->SpawnInitialSections();
+	worldBuilder->SpawnInitialSections();*/
+	UWorldTileFactory* worldTileFactory =  this->WorldFileFactory.GetDefaultObject();
+	worldTileFactory->Setup(this->GetWorld());
+
+
+	int median = this->InitialTilesCount % 2 == 0 ?
+						this->InitialTilesCount / 2
+					:	FMath::FloorToInt(this->InitialTilesCount / 2.f) + 1;
+
+	int initialIndex = median * -1;
+	int finalIndex = median;
+	
+	for (int currentIndex = initialIndex; currentIndex < finalIndex; currentIndex++ ) 
+	{
+		worldTileFactory->Build(currentIndex, 0, 0, this->GetWorld());
+	}
+
 
 	this->CurrentWidgetOnScreen = CreateWidget<UUserWidget>(this->GetWorld(), this->InitialScreen);
 	this->CurrentWidgetOnScreen->AddToViewport();
 
-	this->CurrentStatistics = this->CurrentStatisticsType.GetDefaultObject();
 	this->CurrentStatistics->Init();
 }
 

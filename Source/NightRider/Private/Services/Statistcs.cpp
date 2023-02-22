@@ -7,6 +7,10 @@
 #include <Entities/Zombie.h>
 #include <Entities/Record.h>
 
+#include "../NightRiderGameMode.h"
+
+#include "UObject/UObjectGlobals.h"
+
 #include "JsonObjectConverter.h"
 #include "Misc/FileHelper.h" 
 
@@ -240,8 +244,8 @@ void UStatistcs::AddMultiplier(UWorld* worldTarget, float multi)
 
 int UStatistcs::GetCurrentPlayerLevel(UWorld* worldTarget)
 {
-	ANightRiderGameMode* currentGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
-	return currentGameMode->CurrentStatistics->CurrentLevel;
+	ANightRiderGameMode* nightRiderGameMode = Cast<ANightRiderGameMode>(UGameplayStatics::GetGameMode(worldTarget));
+	return nightRiderGameMode->CurrentStatistics->CurrentLevel;
 }
 
 float UStatistcs::GetDistanceRunned(UWorld* worldTarget)

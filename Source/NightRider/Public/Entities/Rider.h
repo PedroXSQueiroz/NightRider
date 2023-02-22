@@ -4,11 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+
+#include <WorldBuilderModule/Public/Entities/WorldTilesObservable.h>
+
 #include "Rider.generated.h"
 
 
 UCLASS()
-class NIGHTRIDER_API ARider : public APawn
+class NIGHTRIDER_API ARider : public APawn, public IWorldTilesObservable
 {
 	GENERATED_BODY()
 
@@ -108,6 +111,12 @@ public:
 	void SetIntermediaryState();
 
 	void Die();
+
+	virtual FVector GetReferencePosition() override;
+
+	virtual FVector GetReferenceVelocity() override;
+
+	virtual bool IsReference() override;
 
 protected:
 	// Called when the game starts or when spawned
