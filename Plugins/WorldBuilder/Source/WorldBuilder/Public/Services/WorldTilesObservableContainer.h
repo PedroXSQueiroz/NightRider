@@ -12,7 +12,7 @@
  * 
  */
 UCLASS(BlueprintType, Blueprintable)
-class WORLDBUILDERMODULE_API UWorldTilesObservableContainer : public UObject
+class WORLDBUILDER_API UWorldTilesObservableContainer : public UObject
 {
 	GENERATED_BODY()
 

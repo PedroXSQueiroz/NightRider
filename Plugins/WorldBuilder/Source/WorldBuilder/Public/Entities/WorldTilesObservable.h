@@ -22,7 +22,7 @@ class UWorldTilesObservable : public UInterface
 };
 
 UCLASS(Blueprintable)
-class WORLDBUILDERMODULE_API UWorldTileObserverTicker : public UObject, public FTickableGameObject
+class WORLDBUILDER_API UWorldTileObserverTicker : public UObject, public FTickableGameObject
 {
 	
 	GENERATED_BODY()

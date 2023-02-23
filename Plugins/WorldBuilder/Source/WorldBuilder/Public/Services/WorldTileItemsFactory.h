@@ -10,7 +10,7 @@
  * 
  */
 UCLASS(BlueprintType, Blueprintable)
-class WORLDBUILDERMODULE_API UWorldTileItemsFactory : public UObject
+class WORLDBUILDER_API UWorldTileItemsFactory : public UObject
 {
 	GENERATED_BODY()
 

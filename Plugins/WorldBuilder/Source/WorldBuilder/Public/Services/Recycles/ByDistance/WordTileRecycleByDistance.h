@@ -14,7 +14,7 @@
  * 
  */
 UCLASS(BlueprintType, Blueprintable)
-class WORLDBUILDERMODULE_API UWordTileRecycleByDistance : public UWordTileRecycle
+class WORLDBUILDER_API UWordTileRecycleByDistance : public UWordTileRecycle
 {
 	GENERATED_BODY()
 

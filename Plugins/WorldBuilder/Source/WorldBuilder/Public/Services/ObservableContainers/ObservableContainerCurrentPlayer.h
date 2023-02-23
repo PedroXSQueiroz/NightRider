@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class WORLDBUILDERMODULE_API UObservableContainerCurrentPlayer : public UWorldTilesObservableContainer
+class WORLDBUILDER_API UObservableContainerCurrentPlayer : public UWorldTilesObservableContainer
 {
 	GENERATED_BODY()
 

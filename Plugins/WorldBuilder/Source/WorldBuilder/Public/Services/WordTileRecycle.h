@@ -13,7 +13,7 @@
  * 
  */
 UCLASS(BlueprintType, Blueprintable)
-class WORLDBUILDERMODULE_API UWordTileRecycle : public UObject
+class WORLDBUILDER_API UWordTileRecycle : public UObject
 {
 	GENERATED_BODY()
 

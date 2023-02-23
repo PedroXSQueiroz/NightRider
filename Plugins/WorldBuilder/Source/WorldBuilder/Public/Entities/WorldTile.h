@@ -11,7 +11,7 @@
 #include "WorldTile.generated.h"
 
 UCLASS()
-class WORLDBUILDERMODULE_API AWorldTile : public AActor
+class WORLDBUILDER_API AWorldTile : public AActor
 {
 	GENERATED_BODY()
 	

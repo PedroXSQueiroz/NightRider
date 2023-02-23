@@ -106,11 +106,6 @@ void AWorldTile::Tick(float DeltaTime)
 		this->SetActorLocation( this->GetActorLocation() + ( ( referenceVelocity * -1 )  * DeltaTime ) );
 	}
 
-	/*if (this->Reference->IsReference()) 
-	{
-		this->Reference->UpdateReferenceOffset( DeltaTime );
-	}*/
-
 	this->CanBeRecycled = this->Recycle->CanTileBeRecycled(this);
 
 	if ( this->CanBeRecycled && this->Recycle->ShouldRecycle(this) ) 

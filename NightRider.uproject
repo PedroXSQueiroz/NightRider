@@ -14,15 +14,6 @@
 				"UMG",
 				"WorldBuilderModule"
 			]
-		},
-		{
-			"Name": "WorldBuilderModule",
-			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"AdditionalDependencies": [
-				"Engine",
-				"CoreUObject"
-			]
 		}
 	],
 	"Plugins": [
@@ -32,6 +23,10 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "WorldBuilder",
+			"Enabled": true
 		}
 	]
 }

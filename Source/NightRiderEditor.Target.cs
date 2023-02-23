@@ -10,7 +10,7 @@ public class NightRiderEditorTarget : TargetRules
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		ExtraModuleNames.Add("NightRider");
-        ExtraModuleNames.Add("WorldBuilderModule");
+        ExtraModuleNames.Add("WorldBuilder");
 
     }
 }

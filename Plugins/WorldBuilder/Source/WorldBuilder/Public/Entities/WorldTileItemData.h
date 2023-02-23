@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class WORLDBUILDERMODULE_API UWorldTileItemData : public UObject
+class WORLDBUILDER_API UWorldTileItemData : public UObject
 {
 	GENERATED_BODY()
 

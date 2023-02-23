@@ -13,7 +13,7 @@
  * 
  */
 UCLASS()
-class WORLDBUILDERMODULE_API UWorldTileMeshData : public UObject
+class WORLDBUILDER_API UWorldTileMeshData : public UObject
 {
 	GENERATED_BODY()
 
